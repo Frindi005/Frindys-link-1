@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frindi | Соц. сети</title>
+  <!-- Font Awesome для иконок -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;    
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;  
+    }
+
+    body {
+      margin: 0;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100%;
+    }
+
+    /* Фон с градиентом */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(10deg, #006097, rgb(9, 5, 57), #0f0f0f);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      z-index: -2;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Снег */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Контейнер */
+    .container {
+      max-width: 550px;
+      width: 100%;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.55);
+      padding: 25px;
+      margin: 5px auto; /* добавляем отступы для скролла */
+      border-radius: 16px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 1;
+    }
+
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 100%;
+      border: 4px solid #666;
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: #fff;
+      transition: transform 0.4s, opacity 0.4s;
+    }
+
+    .link i {
+      font-size: 1.2rem;
+    }
+
+    .link:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    /* Цвета кнопок */
+    .red { background: #e63946; }
+    .blue { background: #4361ee; }
+    .purple { background: #7209b7; }
+    .black { background: #222; }
+    .gray { background: #444; }
+    .orange { background: #f77f00; }
+
+    .section-title {
+      margin: 25px 0 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #f1f1f1;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <canvas id="snow"></canvas>
+
+  <div class="container">
+    <img src="channels4_profile (1).jpg" alt="avatar" class="avatar">
+    <h1>FRINDI</h1>
+    <h2>Соц. Сети</h2>
+
+    <!-- Соц сети -->
+    <a href="https://youtube.com/" target="_blank" class="link red"><i class="fab fa-youtube"></i> YOUTUBE</a>
+    <a href="https://t.me/" target="_blank" class="link blue"><i class="fab fa-telegram"></i> TELEGRAM</a>
+    <a href="https://twitch.tv/" target="_blank" class="link purple"><i class="fab fa-twitch"></i> TWITCH</a>
+    <a href="https://tiktok.com/" target="_blank" class="link black"><i class="fab fa-tiktok"></i> TIKTOK</a>
+    <a href="https://vk.com/video" target="_blank" class="link red"><i class="fab fa-vk"></i> VK ВИДЕО</a>
+    <a href="https://rutube.ru/" target="_blank" class="link gray"><i class="fa-solid fa-film"></i> RUTUBE</a>
+    <a href="https://dzen.ru/" target="_blank" class="link black"><i class="fa-solid fa-book-open"></i> ДЗЕН</a>
+
+    <!-- Проект -->
+    <div class="section-title">YamiCube</div>
+    <a href="https://t.me/" target="_blank" class="link blue"><i class="fab fa-telegram"></i> TELEGRAM</a>
+    <a href="https://forum.example.com" target="_blank" class="link purple"><i class="fa-solid fa-comments"></i> ФОРУМ</a>
+    <a href="https://vk.com/" target="_blank" class="link blue"><i class="fab fa-vk"></i> VK СООБЩЕСТВО</a>
+
+    <!-- Сервер -->
+    <div class="footer">
+      IP: yamicube.online <br>
+      Версия: 1.16.5–1.18.1
+    </div>
+
+    <!-- Донат -->
+    <div class="section-title">Поддержка донатом</div>
+    <a href="https://www.donationalerts.com/r/frindi_12" target="_blank" class="link orange"><i class="fa-solid fa-hand-holding-dollar"></i> DONATIONALERTS</a>
+  </div>
+
+  <script>
+    // Снег
+    const canvas = document.getElementById("snow");
+    const ctx = canvas.getContext("2d");
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const snowflakes = [];
+
+    function createSnowflakes() {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      const radius = Math.random() * 4 + 1;
+      const speed = Math.random() * 1 + 0.7;
+      snowflakes.push({x, y, radius, speed});
+    }
+
+    function drawSnowflakes() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      for (let flake of snowflakes) {
+        ctx.moveTo(flake.x, flake.y);
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+      }
+      ctx.fill();
+      updateSnowflakes();
+    }
+
+    function updateSnowflakes() {
+      for (let flake of snowflakes) {
+        flake.y += flake.speed;
+        if (flake.y > height) {
+          flake.y = -flake.radius;
+          flake.x = Math.random() * width;
+        }
+      }
+    }
+
+    function animateSnow() {
+      drawSnowflakes();
+      requestAnimationFrame(animateSnow);
+    }
+
+    setInterval(createSnowflakes, 30);
+    animateSnow();
+
+    window.addEventListener("resize", () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+  </script>
+</body>
+</html>
